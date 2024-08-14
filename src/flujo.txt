@@ -1,0 +1,24 @@
+DETALLES DE LA APLICACION
+
+En la pantalla debe aparecer un header, en azul, con un titulo y alguno de los dos botones: 'mostrar las tareas realizadas' o 'no mostrar las tareas realizadas'
+
+
+Debajo del header debe aparece un formulario con un input de tipo texto y un boton pero en vez de tener un texto tiene un icono de 'agregar' o similar
+
+
+Y debajo del formulario deben aparecer los datos ingresados o un mensaje que indique que no hay datos.
+Cada dato ingresado debe aparecer con 2 botones a la derecha: borrar y editar (usar iconos) y un check a la izquierda, antes del dato, indicando que la tarea fue o no realizada
+
+En el momento de editar la tarea, debe aparecer un boton que actualice el nuevo dato 
+
+Al hacer check y cambiar el boton del header debe quitar o mostrar el dato
+
+
+
+
+
+
+
+
+
+
