@@ -20,5 +20,4 @@ Al hacer check y cambiar el boton del header debe quitar o mostrar el dato
 
 
 
-
-
+iniciemos con el header
