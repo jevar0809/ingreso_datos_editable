@@ -20,4 +20,720 @@ Al hacer check y cambiar el boton del header debe quitar o mostrar el dato
 
 
 
-iniciemos con el header
+pegar en el index.html---------------------------------------------------------------------------------------------------------------------------------------
+
+<!-- 
+  proyecto realizado con vite
+  lista de tareas 
+
+-->
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>proyectos</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pegar en main.jsx--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+import ReactDOM from 'react-dom/client'
+import { useState } from 'react'
+import { Header, FormularioTareas, ListaDeTareas } from './componentes'
+import './index.css'
+
+const ROOT = ReactDOM.createRoot(document.getElementById('root'))
+
+
+const App = ()=>{
+
+    /* incialmente creamos  una variable para guardar las tareas que se escriben */
+
+
+    const [tareas, setTareas]  = useState([])
+
+
+    /* esta variable se usa para identificar el estado del boton de 'mostrar tareas completadas' */
+    const [mostrarCompletadas, setMostrarCompletadas] = useState(true)
+
+    
+
+
+    /* vamos a retornar al dom 3 componentes  */
+    return(
+        <div className='contenedor'>
+            <Header 
+                mostrarCompletadas={mostrarCompletadas} 
+                setMostrarCompletadas={setMostrarCompletadas}/>
+            <FormularioTareas 
+                tareas={tareas} 
+                setTareas={setTareas}/>
+            <ListaDeTareas 
+                tareas={tareas} 
+                setTareas={setTareas} 
+                mostrarCompletadas={mostrarCompletadas} />
+        </div>
+    )
+}
+
+
+
+
+
+
+
+
+ROOT.render(
+    <App />
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pegar en componentes.jsx-------------------------------------------------------------------------------------------------------------------------------------
+
+
+/* 
+Se deben instalar los paquetes de iconos y generador random de identificacion 
+ver archivo 'librerias de react'
+
+*/
+
+
+import { useState } from "react";
+import { FaEyeSlash, FaPlusSquare, FaCheckSquare, FaSquare, FaEye} from "react-icons/fa";
+import { CiEdit } from "react-icons/ci";
+import { MdDeleteForever } from "react-icons/md";
+import { v4 as uuidv4 } from 'uuid' 
+
+
+
+
+
+export const Header = ({ mostrarCompletadas, setMostrarCompletadas })=>{
+
+    const cambiarEstadoCompletada = ()=>{
+        setMostrarCompletadas(!mostrarCompletadas)
+    }
+
+
+
+    return (
+        <header className="header">
+            <h1 className="header__titulo">LISTA DE TAREAS</h1>
+
+            {/* dependiendo del estado de la variable 'mostrarCompletadas', sea cargara un boton o el otro */}
+            { mostrarCompletadas ? 
+                <button className="header__boton" onClick={cambiarEstadoCompletada}>
+                    No mostrar 'completadas'
+                    <FaEyeSlash className="header__icono-boton"/>
+                </button>
+                :
+                <button className="header__boton" onClick={cambiarEstadoCompletada} >
+                    Mostrar 'completadas'
+                    <FaEye className="header__icono-boton"/>
+                </button>
+            }
+        </header>
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const FormularioTareas = ({ tareas, setTareas })=>{
+
+    const [tareaIngresada, setTareaIngresada] = useState('')
+    
+    const ingresandoTarea = (e)=>{
+    e.preventDefault()
+    setTareaIngresada(e.target.value)
+    //console.log(tareaIngresada)
+    }
+
+
+
+    const almacenarTarea = (e)=>{
+        e.preventDefault();
+
+        if(tareaIngresada==''){
+            alert('ingrese una tarea')
+
+        } else {
+            setTareas(
+                [...tareas,
+                    {
+                        id:uuidv4(),
+                        tarea: tareaIngresada,
+                        completada: false
+    
+                    }
+                ]
+            )
+            
+            setTareaIngresada('')
+        }
+    }
+    
+    
+   return  (
+        <form className="formulario-tareas" onSubmit={almacenarTarea}>
+            <input 
+                type="text" 
+                className="formulario-tareas__input" 
+                placeholder="Escribe una tarea"
+                value={tareaIngresada}
+                onChange={ingresandoTarea}
+            />
+
+
+            <button
+                type="submit"
+                className="formulario-tareas__btn"
+            >
+                <FaPlusSquare className="formulario-tareas__icono-btn"/>
+            </button>
+        </form>
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const ListaDeTareas = ({ tareas, setTareas, mostrarCompletadas })=>{
+
+
+
+
+     {/* para pintar las tareas en el dom, retornamos un ul   */}
+    return(
+        <ul className="Lista-tareas">
+
+           {/* se verifica si hay tareas en el array, sino las hay... */}
+            {tareas.length==0 ? 
+                /* ... se coloca un div con un mensaje  */
+                <div className="lista-tareas__mensaje">No hay tareas agregadas</div>
+                :
+                /* si hay tareas, se hace un barrido en el array con el metodo 'map'  */
+                tareas.map(tarea=>{
+
+                    /* si la variable 'mostrarCompletadas' es verdadera (por defecto)...  */
+                    if(mostrarCompletadas){
+                        /* ... retornara el componente que contiene la tarea  */
+                        return <Tarea 
+                        key={tarea.id} 
+                        tarea={tarea} 
+                        setTareas={setTareas}
+                        tareas={tareas}
+                    />
+                        /*... si es false, se avalua la propiedad 'completada' del objeto del array 'tarea', si es verdadera...   */
+                    }else if(!tarea.completada){
+
+                        /* ... retorna la tarea, sino... */
+                        return <Tarea 
+                        key={tarea.id} 
+                        tarea={tarea} 
+                        setTareas={setTareas}
+                        tareas={tareas}
+                    />
+                    }
+                    
+                    /* ... se retorna 'nada' */
+                    return
+                })
+            }
+        </ul>
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const Tarea = ({ tarea, tareas, setTareas })=>{
+
+    const [ editandoTarea, setEditandoTarea] = useState(false)
+    const [ nuevaTarea, setNuevaTarea] = useState(tarea.tarea)
+    
+
+    const submitHandler = (e)=>{
+        /* se previene que se recargue la pagina */
+        e.preventDefault();
+    /* se ejecuta una funcion que como argumentos seran el id de la tarea que se va a cambiar, y el valor que se introdujo en el formulario */
+        editarTarea(tarea.id, nuevaTarea)
+    /* luego de editar la tarea, se coloca la variable en 'false' para que se coloque el texto de la nueva tarea en el dom */
+        setEditandoTarea(!editandoTarea)
+    
+    
+    }
+
+
+
+
+
+    /* la funcion recibe el id de la tarea y la variable 'tarea' se actualiza despues de que se recorra el array buscando que tarea tiene el id que devolvio la funcion */
+    const toogle = (id)=>{
+       setTareas(
+        tareas.map(tarea=>{
+            /* una vez que encuentra la tarea con el id, retorna las tareas, pero cambia la propiedad de 'completada' por true  */
+            if (tarea.id===id){
+                return {...tarea, completada: !tarea.completada}
+                /* si la tarea no es ninguna,retorna la tarea nuevamente */
+            } return tarea
+        })
+       )
+
+    }
+
+
+
+
+
+
+
+    const editarTarea = (id, nuevaTarea)=>{
+        /* se cambia el valor del array cuando .map retorna con el array pero con la propiedad tarea ajustada a la nueva  */
+        setTareas(
+         tareas.map(tarea=>{
+             if (tarea.id===id){
+                 return {...tarea, tarea: nuevaTarea}
+ 
+             } return tarea
+         })
+        )
+ 
+     }
+
+
+
+
+ 
+
+
+     const borrarTarea = (id)=>{
+        setTareas(
+/* solo retornaran al array del 'filter' aquellas que tengan un id diferente al buscado y se actualiza el array de 'tareas' */
+            tareas.filter(tarea=>{
+                if (tarea.id!==id){
+                    return tarea;
+    
+                } return
+            })
+           )
+    
+
+     }
+
+
+
+
+
+
+     /* el componente 'Tarea' es un <li> compuesto por 3 parte: 1 boton check para las tareas completadas, 1 texto de la tarea, 2 botones: editar y eliminar */
+    return <li className="lista-tareas__tarea">
+        {/* uno de los props es el objeto con la tarea  */}
+                {
+
+                    /* evaluamos si la tarea esta completada con la propiedad 'completada', (por defecto no) entonces.... */
+                    tarea.completada ?
+                    <FaCheckSquare 
+                        className="lista-tareas__icono lista-tareas__icono-check"
+                        onClick={()=>toogle(tarea.id)}
+                    />
+
+                    
+                    :
+                    /* .... coloca un boton sin check */
+                    <FaSquare 
+                        className="lista-tareas__icono lista-tareas__icono-check"
+                        /* en el momento que se da click, para quitar o poner el check, la funcion se lleva el id de la tarea que se eligio */
+                        onClick={()=>toogle(tarea.id)}
+                    />
+
+                    
+                }
+
+
+
+
+                <div className="lista-tareas__texto">
+                    {/* dependiendo del valor de la variable 'editandoTarea' pondra un formulario o el texto de la tarea: */}
+                    { editandoTarea ?
+                    /* formulario para cambiar el texto de la tarea, cuando se oprime el boton 'Actualizar' se ejecuta la funcion  */
+                        <form className="formulario-editar-tarea" onSubmit={submitHandler}>
+                            <input 
+                                className="formulario-editar-tarea__input"
+                                type="text"
+                                value={nuevaTarea}
+                                /* se captura el nuevo texto de la tarea y se guarda en un usestate */
+                                onChange={(e)=>{setNuevaTarea(e.target.value)}}
+                            />
+                            <button 
+                                className="formulario-editar-tarea__btn"
+                                type="submit"
+                             >Actualizar
+                            </button>
+                        </form>
+                        :
+                        /* texto de la tarea */
+                        tarea.tarea
+                    }
+                </div>
+
+
+                {/* este es el boton para editar la tarea */}    
+                <div className="lista-tareas__contenedor-botones">
+                    <CiEdit 
+                        className="lista-tareas__icono"
+                    /* cuando se da un click cambia un estado y dependiendo de este, se afecta lo que se coloque en el texto de la tarea */
+                        onClick={()=>{setEditandoTarea(!editandoTarea)}}
+                    />
+
+                    <MdDeleteForever 
+                        className="lista-tareas__icono"
+                    /* cuando se da click en el boton de borrar, se llama la funcion y se pasa como argumento el id de la tarea que se quiere borrar */
+                        onClick={()=>{borrarTarea(tarea.id)}}
+                    />
+                </div>
+                 
+            </li>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pegar en index.css---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+:root {
+	--verde: #80BE4E;
+	--azul: #007AEA;
+}
+
+
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
+
+#root{
+    display: flex;
+    justify-content: center;
+}
+
+
+.contenedor {
+	max-width: 700px;
+	width: 100%;
+	height: 100%;
+	max-height: 90vh;
+	overflow: auto;
+	box-shadow: 0 2px 10px rgba(139,139,139,.25);
+	border-radius: 3px;
+	display:flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 50px;
+}
+
+/* * --- --- ---  HEADER --- --- --- */
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 60px;
+	padding: 0 20px;
+	background: var(--azul);
+	color: #fff;
+	border-radius: 3px 3px 0px 0px;
+}
+
+.header__titulo {
+	font-weight:bold;
+	font-size: 24px;
+}
+
+.header__boton {
+	background: none;
+	font-size: 16px;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	background: #004c92;
+	padding: 5px 10px;
+	border-radius: 3px;
+	display: flex;
+	align-items: center;
+}
+
+.header__icono-boton {
+	font-size: 14px;
+	margin-left: 10px;
+}
+
+/* * --- --- ---  FORMULARIO AGREGAR --- --- --- */
+.formulario-tareas {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: relative;
+	padding: 20px;
+	box-shadow: 0 2px 10px rgba(139,139,139,.25);
+}
+
+.formulario-tareas__input {
+	border: none;
+	padding: 15px;
+	width: 100%;
+	font-size: 20px;
+	font-family: 'Roboto', sans-serif;
+	border-bottom: 2px solid #b8b8b8;
+}
+
+.formulario-tareas__input:focus {
+	outline: none;
+	border-bottom: 5px solid var(--azul);
+}
+
+.formulario-tareas__btn {
+	position: absolute;
+	bottom: 40px;
+	right: 20px;
+	border: none;
+	background: none;
+	cursor: pointer;
+}
+
+.formulario-tareas__icono-btn {
+	font-size: 22px;
+	color: var(--verde);
+}
+
+/* * --- --- ---  LISTA TAREAS --- --- --- */
+
+.lista-tareas {
+	list-style: none;
+	height: 100%;
+	overflow: auto;
+}
+
+.lista-tareas__tarea {
+	height: 60px;
+	padding: 0 20px;
+	align-items: center;
+	color: #4B4B4B;
+	font-size: 18px;
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+}
+
+.lista-tareas__texto {
+	text-align: left;
+	width: 100%;
+}
+
+.lista-tareas__tarea:hover .lista-tareas__icono-accion {
+	opacity: 0.5;
+}
+
+.lista-tareas__tarea:nth-child(even) {
+	background: #F3F3F3;
+}
+
+.lista-tareas__contenedor-botones {
+	display: flex;
+	
+}
+
+.lista-tareas__icono {
+	cursor: pointer;
+	font-size: 16px;
+	margin-right: 15px;
+}
+
+.lista-tareas__icono-check {
+	margin-right: 20px;
+	font-size: 26px;
+}
+
+.lista-tareas__icono-accion {
+	margin-left: 20px;
+	opacity: 0;
+	transition: .3s ease all;
+}
+
+.lista-tareas__mensaje {
+	text-align: center;
+	color: #b8b8b8;
+	font-size: 20px;
+	padding: 40px 20px;
+}
+
+/* * --- --- ---  FORMULARIO EDITAR TAREA --- --- --- */
+.formulario-editar-tarea {
+	display: flex;
+}
+
+.formulario-editar-tarea__input {
+	width: 100%;
+	border: none;
+	border-bottom: 2px solid #b8b8b8;
+	background: none;
+	font-size: 20px;
+	font-family: 'Roboto', sans-serif;
+	margin-right: 20px;
+}
+
+.formulario-editar-tarea__btn {
+	border: none;
+	background: var(--verde);
+	cursor: pointer;
+	color: #fff;
+	padding: 0 10px;
+	font-family: 'Roboto', sans-serif;
+	border-radius: 3px;
+}
+
+
+
+
+
+
+
