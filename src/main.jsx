@@ -15,7 +15,7 @@ const App = ()=>{
   
   const [tareas, setTareas] = useState([])
 
-  console.log(tareas)
+  //console.log(tareas)
 
 
 
@@ -28,7 +28,7 @@ const App = ()=>{
     <div className='contenedor'>
       <Header mostrarCompletadas={mostrarCompletadas} setMostrarCompletadas={setMostrarCompletadas}/>
       <Formulario tareas={tareas} setTareas={setTareas}/>
-      <Lista_de_tareas />
+      <Lista_de_tareas tareas={tareas}/>
     </div>
   )
 }

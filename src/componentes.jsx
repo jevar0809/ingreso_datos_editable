@@ -69,12 +69,13 @@ export const Formulario = ({tareas, setTareas})=>{
         e.preventDefault()
         if (tareaIngresada){
             setTareas([
+                ...tareas,
                 {
                     id: uuidv4(),
                     tarea: tareaIngresada,
                     completada:false,
 
-                }, ...tareas
+                }
             ])
         } else {
             alert('por favor, ingrese una tarea')
@@ -115,11 +116,30 @@ export const Formulario = ({tareas, setTareas})=>{
 
 
 
-export const Lista_de_tareas = ()=>{
+
+
+
+
+
+export const Lista_de_tareas = ({tareas})=>{
+
+    //console.log(tareas)
     return(
-        <ul>
-            <Tarea />
-            <div>No hay tareas agregadas</div>
+        <ul className='lista-tareas'>
+            {
+                tareas.length==0?
+                    <div className="lista-tareas__mensaje">No hay tareas agregadas</div>
+                    :
+                    tareas.map(tarea=>{
+                        return (
+                            <Tarea 
+                                llave={tarea.id} 
+                                tarea={tarea.tarea} 
+                                completada={tarea.completada}
+                            />
+                        )
+                    })
+            }
         </ul>
     )
 
@@ -137,20 +157,22 @@ export const Lista_de_tareas = ()=>{
 
 
 
-export const Tarea = ()=>{
+const Tarea = ({llave, tarea, completada})=>{
+
     return(
 
         <>
+            <li key={llave}><FaCheckSquare/> {tarea} <CiEdit/><MdDeleteForever/></li>
+            
+            {/* <li> <FaSquare/> Tarea 1 <CiEdit/><MdDeleteForever/></li> */}
+
             
         </>
         
-        /* 
-
-        <li><FaCheckSquare/> Tarea 1 <CiEdit/><MdDeleteForever/></li>
-            <li> <FaSquare/> Tarea 1 <CiEdit/><MdDeleteForever/></li>
-
         
-        */
+        
+        
+
 
 
     )
