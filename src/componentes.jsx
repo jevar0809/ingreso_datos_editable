@@ -196,26 +196,13 @@ const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
                         className="lista-tareas__icono lista-tareas__icono-check"
                         onClick={()=>{toogle(id)}}
                     />
-            }
-            
-            
-            
-            
-            
-            
-            
-            
-            {tarea} <CiEdit/><MdDeleteForever/>
-            
-            
-        
-        
+            } {tarea} <CiEdit/><MdDeleteForever/>
         </li>
 
         
 
     
-            
+
                 
 
             
