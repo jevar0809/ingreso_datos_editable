@@ -199,36 +199,6 @@ const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
             } {tarea} <CiEdit/><MdDeleteForever/>
         </li>
 
-        
-
-    
-
-                
-
-            
-            
-            
-
-            
-    
-        
-        
-        
-        
-
-
-
     )
 }
-
-
-
-
-/* <FaCheckSquare/> {tarea} <CiEdit/><MdDeleteForever/>
-                :
-                <FaSquare/> {tarea} <CiEdit/><MdDeleteForever/> */
-            
-
-
-
 
