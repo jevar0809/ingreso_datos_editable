@@ -28,7 +28,7 @@ const App = ()=>{
     <div className='contenedor'>
       <Header mostrarCompletadas={mostrarCompletadas} setMostrarCompletadas={setMostrarCompletadas}/>
       <Formulario tareas={tareas} setTareas={setTareas}/>
-      <Lista_de_tareas tareas={tareas}/>
+      <Lista_de_tareas tareas={tareas} setTareas={setTareas}/>
     </div>
   )
 }

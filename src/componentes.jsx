@@ -121,9 +121,9 @@ export const Formulario = ({tareas, setTareas})=>{
 
 
 
-export const Lista_de_tareas = ({tareas})=>{
+export const Lista_de_tareas = ({tareas, setTareas})=>{
 
-    //console.log(tareas)
+    console.log(tareas)
     return(
         <ul className='lista-tareas'>
             {
@@ -133,9 +133,12 @@ export const Lista_de_tareas = ({tareas})=>{
                     tareas.map(tarea=>{
                         return (
                             <Tarea 
-                                llave={tarea.id} 
+                                key={tarea.id}
                                 tarea={tarea.tarea} 
                                 completada={tarea.completada}
+                                id={tarea.id}
+                                tareas={tareas}
+                                setTareas={setTareas}
                             />
                         )
                     })
@@ -157,17 +160,70 @@ export const Lista_de_tareas = ({tareas})=>{
 
 
 
-const Tarea = ({llave, tarea, completada})=>{
+const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
+
+
+    const toogle = (id)=>{
+
+       
+        const idEncontrado = tareas.map(tarea=>{
+            if(tarea.id===id){
+                return {...tarea, completada: !tarea.completada}
+            } else return tarea
+        })
+
+        setTareas(idEncontrado)
+        
+    }
+
+
+
+
+
+
 
     return(
-
-        <>
-            <li key={llave}><FaCheckSquare/> {tarea} <CiEdit/><MdDeleteForever/></li>
+        <li>
             
-            {/* <li> <FaSquare/> Tarea 1 <CiEdit/><MdDeleteForever/></li> */}
+            {
+                completada? 
+                    <FaCheckSquare 
+                        className="lista-tareas__icono lista-tareas__icono-check"
+                        onClick={()=>{toogle(id)}}
+                    /> 
+                    : 
+                    <FaSquare 
+                        className="lista-tareas__icono lista-tareas__icono-check"
+                        onClick={()=>{toogle(id)}}
+                    />
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            {tarea} <CiEdit/><MdDeleteForever/>
+            
+            
+        
+        
+        </li>
+
+        
+
+    
+            
+                
 
             
-        </>
+            
+            
+
+            
+    
         
         
         
@@ -181,7 +237,10 @@ const Tarea = ({llave, tarea, completada})=>{
 
 
 
-
+/* <FaCheckSquare/> {tarea} <CiEdit/><MdDeleteForever/>
+                :
+                <FaSquare/> {tarea} <CiEdit/><MdDeleteForever/> */
+            
 
 
 

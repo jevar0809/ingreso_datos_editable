@@ -22,6 +22,17 @@ Al hacer check y cambiar el boton del header debe quitar o mostrar el dato
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 pegar en el index.html---------------------------------------------------------------------------------------------------------------------------------------
 
 <!-- 
