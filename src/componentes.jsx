@@ -163,6 +163,27 @@ export const Lista_de_tareas = ({tareas, setTareas})=>{
 const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
 
 
+    const [editandoTarea, setEditandoTarea] = useState(false)
+    const [nuevaTarea, setNuevaTarea] = useState(tarea)
+
+   
+
+    const editarTarea = (id, nuevaTarea)=>{
+        const editarArrayTareas = tareas.map(tarea=>{
+            if(tarea.id===id){
+                return {...tarea, tarea:nuevaTarea}
+
+            }else return tarea
+        })
+
+        setTareas(editarArrayTareas)
+        setEditandoTarea(!editandoTarea)
+
+        console.log(tareas)
+
+    }
+
+
     const toogle = (id)=>{
 
        
@@ -183,7 +204,7 @@ const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
 
 
     return(
-        <li>
+        <li className="lista-tareas__tarea">
             
             {
                 completada? 
@@ -196,7 +217,57 @@ const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
                         className="lista-tareas__icono lista-tareas__icono-check"
                         onClick={()=>{toogle(id)}}
                     />
-            } {tarea} <CiEdit/><MdDeleteForever/>
+            } 
+            
+            
+            
+            
+            
+            
+            {editandoTarea? 
+                <form className="formulario-editar-tarea">
+                    <input 
+                        type="text" 
+                        className="formulario-editar-tarea__input"
+                        value={nuevaTarea}
+                        onChange={(e)=>{setNuevaTarea(e.target.value)}}
+                    />
+                    
+                    <button 
+                        className="formulario-editar-tarea__btn"
+                        type="submit"
+                        onClick={(e)=>{
+                            e.preventDefault()
+                            editarTarea(id, nuevaTarea)}
+                        }
+                    >Actualizar</button>
+
+
+                </form>
+                :
+                tarea 
+            }
+            
+
+
+
+            <div className="lista-tareas__contenedor-botones">
+                <CiEdit 
+                    className="lista-tareas__icono" 
+                    onClick={()=>{setEditandoTarea(!editandoTarea)}}
+                />
+                
+                
+                
+                <MdDeleteForever className="lista-tareas__icono"/>
+
+            </div>
+            
+            
+            
+            
+            
+            
         </li>
 
     )
