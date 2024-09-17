@@ -3,15 +3,98 @@ DETALLES DE LA APLICACION
 En la pantalla debe aparecer un header, en azul, con un titulo y alguno de los dos botones: 'mostrar las tareas realizadas' o 'no mostrar las tareas realizadas'
 
 
-Debajo del header debe aparece un formulario con un input de tipo texto y un boton pero en vez de tener un texto tiene un icono de 'agregar' o similar
+Debajo del header debe aparece un formulario con un input de tipo texto y un boton, pero este en vez de tener un texto tiene un icono de 'agregar' o similar
 
 
-Y debajo del formulario deben aparecer los datos ingresados o un mensaje que indique que no hay datos.
-Cada dato ingresado debe aparecer con 2 botones a la derecha: borrar y editar (usar iconos) y un check a la izquierda, antes del dato, indicando que la tarea fue o no realizada
+Debajo del formulario deben aparecer los datos ingresados o un mensaje que indique que no hay datos.
+
+Cada dato ingresado debe aparecer con 2 botones a la derecha: borrar y editar (usar iconos) y un check a la izquierda de la tarea, indicando que esta fue o no realizada
 
 En el momento de editar la tarea, debe aparecer un boton que actualice el nuevo dato 
 
 Al hacer check y cambiar el boton del header debe quitar o mostrar el dato
+
+Por ultimo se debe borrar la tarea si es necesario
+
+
+
+
+
+
+
+
+
+
+¿COMO SE CAMBIA EL BOTON DE MOSTRAR O NO LA TAREA?
+
+cada vez que se da click en dicho boton, se debe cambiar el estado de un hook 'useState'. Inicialmente este hook tiene un estado booleano determinado, como true o false. En el componente que retorna el boton de mostrar o no las tareas y usando un operador ternario se evalua el hook y dependiendo de su estado colocara un boton o el otro. Cada boton, sea el de mostrar o no, debe tener un 'onClick' que ejecutara una funcion para que cambie el valor del hook a su booleano contrario, si estaba true pasa a false y viceversa, de esta forma el ternario volvera a colocar el boton requerido.
+
+            {
+                mostrarCompletadas? 
+                    <button 
+                        onClick={cambiarEstadoDeCompletadas}
+                        > Mostrar tareas realizadas <FaEye />
+                    </button>
+                    :
+                    <button 
+                        onClick={cambiarEstadoDeCompletadas}
+                        > No Mostrar tareas realizadas <FaEyeSlash />
+                    </button>
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+¿COMO SE HACE PARA COLOCAR CHECK EN LA TAREA?
+
+cada tarea generada es un objeto con un id, el dato capturado del input y un valor booleano que por defecto esta 'false'
+    tarea = {
+        id: numero aleatorio
+        tarea: datoCapturado
+        completada: false
+    }
+
+
+
+
+
+cada tarea se pinta en un componente que retorna un <li>. Este <li> esta formado por: el boton del check, la tarea, un boton de editar y un boton de eliminar, por ejemplo: <li> <check> 'tarea' <editar> <eliminar> </li>
+
+para que ponga un check o no, usando un operador ternario se evalua el valor booleano de la propiedad 'completada' y dependiendo de dicho booleano se colacara una imagen o la otra (una sin check o la otra con check)
+
+            {
+                completada? 
+                    <FaCheckSquare /> 
+                    : 
+                    <FaSquare />
+            } 
+
+
+
+
+
+Para hacer el cambio nuevamente 
 
 
 
