@@ -119,8 +119,6 @@ export const Formulario = ({tareas, setTareas})=>{
 
 
 
-
-
 export const Lista_de_tareas = ({tareas, setTareas})=>{
 
     console.log(tareas)
@@ -166,7 +164,7 @@ const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
     const [editandoTarea, setEditandoTarea] = useState(false)
     const [nuevaTarea, setNuevaTarea] = useState(tarea)
 
-   
+
 
     const editarTarea = (id, nuevaTarea)=>{
         const editarArrayTareas = tareas.map(tarea=>{
@@ -184,9 +182,11 @@ const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
     }
 
 
+    
+    
     const toogle = (id)=>{
 
-       
+
         const idEncontrado = tareas.map(tarea=>{
             if(tarea.id===id){
                 return {...tarea, completada: !tarea.completada}
