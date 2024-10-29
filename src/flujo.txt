@@ -95,7 +95,7 @@ para que ponga o quite un check, se usa un operador ternario que evalua el valor
 
 
 
-Para hacer el cambio nuevamente, usamos un evento 'onClick', sobre este boton de check, que ejecutara una funcion. Esta recibira como parametro el 'id' de la tarea y usando el metodo .map recorremos el array de las tareas que estan guardadas y por cada tarea, usando un 'if', buscamos que el id del parametro sea igual al id de la tarea. Cuando sea hallado retornamos un objeto con todos los datos del objeto de la tarea, usando el operador spread, pero cambiando el valor booleano.
+Para hacer el cambio nuevamente, usamos un evento 'onClick' sobre este boton de check que ejecutara una funcion. Esta recibira como parametro el 'id' de la tarea y usando el metodo .map recorremos el array de las tareas que estan guardadas y por cada tarea, usando un 'if', buscamos que el id del parametro sea igual al id de la tarea. Cuando sea hallado retornamos un objeto con todos los datos del objeto de la tarea, usando el operador spread, pero cambiando el valor booleano en 'completada'.
 
         const toogle = (id)=>{
             const idEncontrado = tareas.map(tarea=>{
@@ -109,6 +109,96 @@ Para hacer el cambio nuevamente, usamos un evento 'onClick', sobre este boton de
 
 
 De esta forma cuando se pregunte el valor de 'completada' pondra uno u otro boton
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+¿COMO SE HACE PARA EDITAR LA TAREA?
+
+cada tarea se pinta en un componente que retorna un <li>. Este <li> esta formado por: el boton del check, la tarea, un boton de editar y un boton de eliminar, por ejemplo: <li> <check> 'tarea' <editar> <eliminar> </li>
+
+Lo que se hace es que 'tarea' este dentro de un ternario de tal manera que este muestre la tarea o un formulario y para ello, dentro de este componente, usamos un useState que guardara un 'false' inicialmente: const [editandoTarea, setEditandoTarea] = useState(false)
+
+
+            {editandoTarea? 
+                <form />
+                :
+                tarea 
+            }
+
+si 'editandoTarea' es verdadero muestra el formulario, caso contrario muestra la tarea
+
+Para cambiar el valor de este ternario, sobre <editar>, que puede ser una imagen o un boton, usamos un 'onClick' que ejecutara como funcion cambiar el estado de 'editandoTarea' 
+
+                <editar 
+                   onClick={()=>{setEditandoTarea(!editandoTarea)}}
+                />
+
+
+De esta forma se pintara en pantalla la tarea o el formulario.
+
+Este formulario estara compuesto por un input de tipo texto y un boton con el nombre 'Actualizar'. Para capturar la nueva tarea, la actualizada, usamos un usestate:  const [nuevaTarea, setNuevaTarea] = useState(tarea) y le pasamos la tarea actual para que no quede vacio el campo de texto.
+
+                <form className="formulario-editar-tarea">
+                    <input 
+                        type="text" 
+                        value={nuevaTarea}
+                        onChange={(e)=>{setNuevaTarea(e.target.value)}}
+                    />
+                    
+                    <button 
+                        type="submit"
+                        onClick={(e)=>{
+                            e.preventDefault()
+                            editarTarea(id, nuevaTarea)}
+                        }
+                    >Actualizar</button>
+                </form>
+
+
+con el 'onChange' del input reemplazamos la tarea anterior por la nueva. Para actualizarla, en el boton usamos un 'onClick' que ejecutara una funcion 'editarTarea(id, nuevaTarea)' llevando como argumentos el id de la tarea y el valor capturado en el input.
+
+En la funcion se recorrera el array de tareas para buscar la que hay que reemplazar por la nueva, finalmente se actualiza todo el array de tareas y se cambia el estado de editando tarea para que desaparezca el formulario:
+
+    const editarTarea = (id, nuevaTarea)=>{
+        const editarArrayTareas = tareas.map(tarea=>{
+            if(tarea.id===id){
+                return {...tarea, tarea:nuevaTarea}
+
+            }else return tarea
+        })
+
+        setTareas(editarArrayTareas)
+        setEditandoTarea(!editandoTarea)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

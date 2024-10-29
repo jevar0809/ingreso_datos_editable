@@ -257,10 +257,7 @@ const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
                     onClick={()=>{setEditandoTarea(!editandoTarea)}}
                 />
                 
-                
-                
                 <MdDeleteForever className="lista-tareas__icono"/>
-
             </div>
             
             
