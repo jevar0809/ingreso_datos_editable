@@ -58,6 +58,102 @@ cada vez que se da click en dicho boton, se debe cambiar el estado de un hook 'u
 
 
 
+COMO SE GUARDAN LAS TAREAS?
+
+Se hace un componente que retorna un formulario con un input de tipo texto y un boton para almacenar la tarea. Para capturar el texto se usa el evento 'onChange' que ejecuta una funcion capturando el texto mediante el 'e.target.value' pero esta captura se hace a una variable que hace parte de un useState que inicialmente tendra un valor vacio (' ') Usando un console.log podemos ver la variable con el texto capturado: 
+
+
+
+        export const Formulario = ()=>{
+
+            const [tareaIngresada, setTareaIngresada] = useState('')
+
+            const ingresandoTarea = (e)=>{setTareaIngresada(e.target.value)}
+
+
+
+
+            return(
+
+                <form className="formulario-tareas">
+                    <input 
+                        type="text"
+                        placeholder="Escribe una tarea y agregala"
+                        value={tareaIngresada} 
+                        onChange={ingresandoTarea} 
+                    />
+
+                        
+                    <button onClick={almacenarTarea}>
+                        <FaPlusSquare />
+                    </button>
+                </form>
+            )
+        }
+
+
+
+Para almacenar la tarea usamos un 'onClick' en el elemento <button> que a su vez ejecutara una funcion. Esta tiene un if que evalua la variable donde se guardo el texto ingresado: si dicha variable esta vacia colocara un 'alert', sino esta vacia, y usando un useState inicialmente con un array vacio, crearemos un array usando el operador spread para colocar en cada posicion de memoria las tareas ya existentes y colocando en la ultima posicion del array un objeto con los siguientes datos: un id, la tarea ingresada desde el input y una clave con un valor booleano 'false'. Finalmente colocamos un string vacio en el useState de la tarea ingresada para borrar el dato ingresado en el input: 
+
+
+
+
+        <button onClick={almacenarTarea}>
+            <FaPlusSquare />
+        </button>
+
+
+
+        const [tareas, setTareas] = useState([])
+
+
+
+        const almacenarTarea = (e)=>{
+            e.preventDefault()
+            if (tareaIngresada){
+                setTareas([
+                    ...tareas,
+                    {
+                        id: uuidv4(),
+                        tarea: tareaIngresada,
+                        completada:false,
+
+                     }
+                ])
+            } else {
+                alert('por favor, ingrese una tarea')
+            }
+
+            setTareaIngresada('')
+        }
+
+
+
+
+NOTA 1: EL useState donde se almacenaran las tareas, en este proyecto, esta como una variable global, pues se utilizara en varios componentes 
+
+NOTA 2: se puede variar el orden como se crea el array de tareas: primero se hace el objeto y luego se extienden las demas tareas o primero se extienden las tareas y despues se hace el objeto. De esta forma tambien varia el orden en que van apareciendo las tareas en el DOM
+
+NOTA 3: El 'id' del objeto se hace usando una libreria (import {v4 as uuidv4 } from 'uuid') para que nunca se repita este numero ya que va a identificar la tarea de las demas.
+
+
+Hasta este punto las tareas ya estan guardadas, es decir, todo lo que se escriba en el input se guardara en un array 'tareas' lo que toca hacer es que aparezcan en el DOM
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -148,7 +244,7 @@ Para cambiar el valor de este ternario, sobre <editar>, que puede ser una imagen
 
 De esta forma se pintara en pantalla la tarea o el formulario.
 
-Este formulario estara compuesto por un input de tipo texto y un boton con el nombre 'Actualizar'. Para capturar la nueva tarea, la actualizada, usamos un usestate:  const [nuevaTarea, setNuevaTarea] = useState(tarea) y le pasamos la tarea actual para que no quede vacio el campo de texto.
+Este formulario estara compuesto por un input de tipo texto y un boton con el nombre 'Actualizar'. Para capturar la nueva tarea, la actualizada, usamos un usestate:  const [nuevaTarea, setNuevaTarea] = useState(tarea) y le pasamos la tarea actual para que no quede vacio el campo de texto cuando se entre a actualizar:
 
                 <form className="formulario-editar-tarea">
                     <input 

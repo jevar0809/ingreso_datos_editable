@@ -23,9 +23,9 @@ export const Header = ({mostrarCompletadas, setMostrarCompletadas})=>{
     
     return(
         <header className="header">
-
+            
             <h1 className="header__titulo">LISTA DE TAREAS</h1>
-
+            
             {
                 mostrarCompletadas ? 
                 <button 
@@ -39,10 +39,8 @@ export const Header = ({mostrarCompletadas, setMostrarCompletadas})=>{
                     onClick={cambiarEstadoDeCompletadas}
                     > No Mostrar tareas realizadas <FaEyeSlash className="header__icono-boton"/>
                 </button>
-
             }
         </header>
-
     )
 }
 
@@ -62,7 +60,6 @@ export const Formulario = ({tareas, setTareas})=>{
     const ingresandoTarea = (e)=>{
         setTareaIngresada(e.target.value)
         //console.log(tareaIngresada)
-
     }
 
     const almacenarTarea = (e)=>{
@@ -70,17 +67,15 @@ export const Formulario = ({tareas, setTareas})=>{
         if (tareaIngresada){
             setTareas([
                 ...tareas,
+                
                 {
                     id: uuidv4(),
                     tarea: tareaIngresada,
                     completada:false,
-
-                }
+                } 
             ])
-        } else {
-            alert('por favor, ingrese una tarea')
-        }
-
+        } else {alert('por favor, ingrese una tarea')}
+        
         setTareaIngresada('')
     }
 
