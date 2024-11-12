@@ -22,234 +22,346 @@ Por ultimo se debe borrar la tarea si es necesario
 
 
 
+const COMO SE GUARDAN LAS TAREAS Y COMO APARECEN EN EL DOM? = (){
+    Se hace un componente que retorna un formulario con un input de tipo texto y un boton para almacenar la tarea. Para capturar el texto se usa el evento 'onChange' que ejecuta una funcion capturando el texto mediante el 'e.target.value' pero esta captura se hace a una variable que hace parte de un useState que inicialmente tendra un valor vacio (' ') Usando un console.log podemos ver la variable con el texto capturado: 
 
 
 
-¿COMO SE CAMBIA EL BOTON DE MOSTRAR O NO LA TAREA?
+                export const Formulario = ()=>{
 
-cada vez que se da click en dicho boton, se debe cambiar el estado de un hook 'useState'. Inicialmente este hook tiene un estado booleano determinado, como true o false. En el componente que retorna el boton de mostrar o no las tareas y usando un operador ternario se evalua el hook y dependiendo de su estado colocara un boton o el otro. Cada boton, sea el de mostrar o no, debe tener un 'onClick' que ejecutara una funcion para que cambie el valor del hook a su booleano contrario, si estaba true pasa a false y viceversa, de esta forma el ternario volvera a colocar el boton requerido.
+                    const [tareaIngresada, setTareaIngresada] = useState('')
 
-            {
-                mostrarCompletadas? 
-                    <button 
-                        onClick={cambiarEstadoDeCompletadas}
-                        > Mostrar tareas realizadas <FaEye />
-                    </button>
-                    :
-                    <button 
-                        onClick={cambiarEstadoDeCompletadas}
-                        > No Mostrar tareas realizadas <FaEyeSlash />
-                    </button>
-
-            }
+                    const ingresandoTarea = (e)=>{setTareaIngresada(e.target.value)}
 
 
 
 
+                    return(
+
+                        <form className="formulario-tareas">
+                            <input 
+                                type="text"
+                                placeholder="Escribe una tarea y agregala"
+                                value={tareaIngresada} 
+                                onChange={ingresandoTarea} 
+                            />
+
+                                
+                            <button onClick={almacenarTarea}>
+                                <FaPlusSquare />
+                            </button>
+                        </form>
+                    )
+                }
+
+
+
+        Para almacenar la tarea usamos un 'onClick' en el elemento <button> que a su vez ejecutara una funcion. Esta tiene un if que evalua la variable donde se guardo el texto ingresado: si dicha variable esta vacia colocara un 'alert', sino esta vacia, y usando un useState inicialmente con un array vacio, crearemos un array usando el operador spread para colocar en cada posicion de memoria las tareas ya existentes y colocando en la ultima posicion del array un objeto con los siguientes datos: un id, la tarea ingresada desde el input y una clave con un valor booleano 'false'. Finalmente colocamos un string vacio en el useState de la tarea ingresada para borrar el dato ingresado en el input: 
 
 
 
 
+                <button onClick={almacenarTarea}>
+                    <FaPlusSquare />
+                </button>
 
 
 
+                const [tareas, setTareas] = useState([])
 
 
 
+                const almacenarTarea = (e)=>{
+                    e.preventDefault()
+                    if (tareaIngresada){
+                        setTareas([
+                            ...tareas,
+                            {
+                                id: uuidv4(),
+                                tarea: tareaIngresada,
+                                completada:false,
 
-
-COMO SE GUARDAN LAS TAREAS Y COMO APARECEN EN EL DOM?
-
-Se hace un componente que retorna un formulario con un input de tipo texto y un boton para almacenar la tarea. Para capturar el texto se usa el evento 'onChange' que ejecuta una funcion capturando el texto mediante el 'e.target.value' pero esta captura se hace a una variable que hace parte de un useState que inicialmente tendra un valor vacio (' ') Usando un console.log podemos ver la variable con el texto capturado: 
-
-
-
-        export const Formulario = ()=>{
-
-            const [tareaIngresada, setTareaIngresada] = useState('')
-
-            const ingresandoTarea = (e)=>{setTareaIngresada(e.target.value)}
-
-
-
-
-            return(
-
-                <form className="formulario-tareas">
-                    <input 
-                        type="text"
-                        placeholder="Escribe una tarea y agregala"
-                        value={tareaIngresada} 
-                        onChange={ingresandoTarea} 
-                    />
-
-                        
-                    <button onClick={almacenarTarea}>
-                        <FaPlusSquare />
-                    </button>
-                </form>
-            )
-        }
-
-
-
-Para almacenar la tarea usamos un 'onClick' en el elemento <button> que a su vez ejecutara una funcion. Esta tiene un if que evalua la variable donde se guardo el texto ingresado: si dicha variable esta vacia colocara un 'alert', sino esta vacia, y usando un useState inicialmente con un array vacio, crearemos un array usando el operador spread para colocar en cada posicion de memoria las tareas ya existentes y colocando en la ultima posicion del array un objeto con los siguientes datos: un id, la tarea ingresada desde el input y una clave con un valor booleano 'false'. Finalmente colocamos un string vacio en el useState de la tarea ingresada para borrar el dato ingresado en el input: 
-
-
-
-
-        <button onClick={almacenarTarea}>
-            <FaPlusSquare />
-        </button>
-
-
-
-        const [tareas, setTareas] = useState([])
-
-
-
-        const almacenarTarea = (e)=>{
-            e.preventDefault()
-            if (tareaIngresada){
-                setTareas([
-                    ...tareas,
-                    {
-                        id: uuidv4(),
-                        tarea: tareaIngresada,
-                        completada:false,
-
-                     }
-                ])
-            } else {
-                alert('por favor, ingrese una tarea')
-            }
-
-            setTareaIngresada('')
-        }
-
-
-
-
-NOTA 1: EL useState donde se almacenaran las tareas, en este proyecto, esta como una variable global, pues se utilizara en varios componentes 
-
-NOTA 2: se puede variar el orden como se crea el array de tareas: primero se hace el objeto y luego se extienden las demas tareas o primero se extienden las tareas y despues se hace el objeto. De esta forma tambien varia el orden en que van apareciendo las tareas en el DOM
-
-NOTA 3: El 'id' del objeto se hace usando una libreria (import {v4 as uuidv4 } from 'uuid') para que nunca se repita este numero ya que va a identificar la tarea de las demas. Ver documento 'LIBRERIAS DE REACT' en 'PAQUETE GENERACION RANDOM DE NUMEROS DE IDENTIFICACION'
-
-
-Hasta este punto las tareas ya estan guardadas, es decir, todo lo que se escriba en el input se guardara en un array 'tareas' lo que toca hacer es que aparezcan en el DOM.
-
-
-Para ello hacemos otro componente que va a retornar una lista desordenada. Recordemos la NOTA 1 de arriba, de tal manera que dicho componente debe tener como 'props' las variables del useState usado para almacenar el array de tareas. Usando un .log podemos ver la info que tiene el array de tareas.  
-
-Luego se evalua si en el array de 'tareas' hay informacion, es decir, si el length de dicho array esta por encima de 0. Para ello usamos un ternario: si no hay tareas devuelve un mensaje indicando que no hay tareas: <div>NO HAY TAREAS AGREGADAS</div>, pero si el length de dicho array esta por encima de 0, es decir que tiene tareas, usamos el metodo .map() para extraer estos datos. 
-Este .map va a retornar otro componente con la tarea, como estamos creando una lista desordenada, <ul>, debe retornar un <li> por cada tarea que haya en el array. 
-
-
-
-        export const Lista_de_tareas = ({tareas, setTareas})=>{
-            
-            console.log(tareas)
-            
-            return(             
-                <ul>
-                    {
-                        tareas.length==0? 
-                            <div>No hay tareas agregadas</div>
-                            :
-                            tareas.map(tarea=>{
-                                return (
-                                    <Tarea 
-                                        key={tarea.id}
-                                        tarea={tarea.tarea} 
-                                        completada={tarea.completada}
-                                        id={tarea.id}
-                                        tareas={tareas}
-                                        setTareas={setTareas}
-                                    />)
-                            })
+                            }
+                        ])
+                    } else {
+                        alert('por favor, ingrese una tarea')
                     }
-                </ul>
+
+                    setTareaIngresada('')
+                }
+
+
+
+
+        NOTA 1: EL useState donde se almacenaran las tareas, en este proyecto, esta como una variable global, pues se utilizara en varios componentes 
+
+        NOTA 2: se puede variar el orden como se crea el array de tareas: primero se hace el objeto y luego se extienden las demas tareas o primero se extienden las tareas y despues se hace el objeto. De esta forma tambien varia el orden en que van apareciendo las tareas en el DOM
+
+        NOTA 3: El 'id' del objeto se hace usando una libreria (import {v4 as uuidv4 } from 'uuid') para que nunca se repita este numero ya que va a identificar la tarea de las demas. Ver documento 'LIBRERIAS DE REACT' en 'PAQUETE GENERACION RANDOM DE NUMEROS DE IDENTIFICACION'
+
+
+        Hasta este punto las tareas ya estan guardadas, es decir, todo lo que se escriba en el input se guardara en un array 'tareas' lo que toca hacer es que aparezcan en el DOM.
+
+
+        Para ello hacemos otro componente que va a retornar una lista desordenada. Recordemos la NOTA 1 de arriba, de tal manera que dicho componente debe tener como 'props' las variables del useState usado para almacenar el array de tareas. Usando un .log podemos ver la info que tiene el array de tareas.  
+
+        Luego se evalua si en el array de 'tareas' hay informacion, es decir, si el length de dicho array esta por encima de 0. Para ello usamos un ternario: si no hay tareas devuelve un mensaje indicando que no hay tareas: <div>NO HAY TAREAS AGREGADAS</div>, pero si el length de dicho array esta por encima de 0, es decir que tiene tareas, usamos el metodo .map() para extraer estos datos. 
+        Este .map va a retornar otro componente con la tarea, como estamos creando una lista desordenada, <ul>, debe retornar un <li> por cada tarea que haya en el array. 
+
+
+
+                export const Lista_de_tareas = ({tareas, setTareas})=>{
+                    
+                    console.log(tareas)
+                    
+                    return(             
+                        <ul>
+                            {
+                                tareas.length==0? 
+                                    <div>No hay tareas agregadas</div>
+                                    :
+                                    tareas.map(tarea=>{
+                                        return (
+                                            <Tarea 
+                                                key={tarea.id}
+                                                tarea={tarea.tarea} 
+                                                completada={tarea.completada}
+                                                id={tarea.id}
+                                                tareas={tareas}
+                                                setTareas={setTareas}
+                                            />)
+                                    })
+                            }
+                        </ul>
+                    )
+                }
+
+
+
+        Veamos que el componente de 'Tarea' se carga unos cuantos props: 'key' es la llave de cada <li> dentro del <ul>, el dato que se escribio en el input del formulario, el valor booleano de la clave 'completada', el 'id' de la tarea y finalmente las constantes del useState usadas para guardar las 'tareas' y modificarlas 'setTareas' 
+
+        Ahora analicemos el componente <Tarea> 
+        Este componente retorna un <li> por cada tarea guardada en el array 'tarea', pero este <li> tiene varios elementos mas: 
+        <li> <check> formulario o tarea <editar> <eliminar>
+
+        <check> son dos graficas de chequeo para cuando se ha hecho o no la tarea, una tiene check y la otra no
+        <formulario> o 'tarea' significa que muestra la tarea o muestra un formulario para editarla 
+        <editar> es un boton que se usa para editar la tarea, de este depende que se muestre el formulario 
+        <eliminar> es un boton que se usa para eliminar la tarea del array 
+
+        En el caso de los elementos <check> y <formulario> o 'tarea' se requiere de un operador ternario que me ponga uno u otro elemento. Veamos el componente 'Tarea': 
+
+
+
+        const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
+            
+            return(
+                <li>
+                    
+                    {
+                        completada? 
+                            <FaCheckSquare /> 
+                            : 
+                            <FaSquare />
+                    } 
+                    
+                    
+                    {editandoTarea? 
+                        <form >
+                            <input type="text" />
+                            <button >Actualizar</button>
+                        </form>
+                        :
+                        tarea 
+                    }
+                    
+                    
+                    <CiEdit />
+                    <MdDeleteForever />
+                </li>
             )
         }
 
 
 
-Veamos que el componente de 'Tarea' se carga unos cuantos props: 'key' es la llave de cada <li> dentro del <ul>, el dato que se escribio en el input del formulario, el valor booleano de la clave 'completada', el 'id' de la tarea y finalmente las constantes del useState usadas para guardar las 'tareas' y modificarlas 'setTareas' 
 
-Ahora analicemos el componente <Tarea> 
-Este componente retorna un <li> por cada tarea guardada en el array 'tarea', pero este <li> tiene varios elementos mas: 
-<li> <check> formulario o tarea <editar> <eliminar>
+        Recordemos que cada tarea es creada con un objeto y este tiene una clave con un valor booleano: 'completada: false'
+        Para colocarle un check o quitarselo a la tarea, necesitamos evaluar esta clave con un ternario y como tiene un valor 'false' va a saltar a la instruccion que esta despues de los dos puntos. Es aqui donde colocamos una imagen sin check. PILAS!! 'completada' debe ser un prop del componente.
+        Para colocar imagenes vease el documento 'LIBRERIAS DE REACT' la seccion 'PAQUETE DE ICONOS' 
 
-<check> son dos graficas de chequeo para cuando se ha hecho o no la tarea, una tiene check y la otra no
-<formulario> o 'tarea' significa que muestra la tarea o muestra un formulario para editarla 
-<editar> es un boton que se usa para editar la tarea, de este depende que se muestre el formulario 
-<eliminar> es un boton que se usa para eliminar la tarea del array 
-
-En el caso de los elementos <check> y <formulario> o 'tarea' se requiere de un operador ternario que me ponga uno u otro elemento. Veamos el componente 'Tarea': 
-
+                    {
+                        completada? 
+                            <FaCheckSquare /> 
+                            : 
+                            <FaSquare />
+                    } 
 
 
-const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
-    
-    return(
-        <li>
+
+
+
+        Luego, para colocar primero la tarea y despues con un boton el formulario, necesitamos de un useState que me guarde un booleano que inicialmente me salte a la tarea:
+
+
+                    const [editandoTarea, setEditandoTarea] = useState(false)
+
+                    {editandoTarea? 
+                        <form >
+                            <input type="text" />
+                            <button >Actualizar</button>
+                        </form>
+                        :
+                        tarea 
+                    }
+}
+
+        
+
+
+
+
+
+const ¿COMO SE HACE PARA COLOCAR O QUITAR UN CHECK EN LA TAREA? = (){
+    cada tarea generada es un objeto con un id, el dato capturado del input y un valor booleano que por defecto esta 'false'
+                tarea = {
+                    id: numero aleatorio
+                    tarea: datoCapturado
+                    completada: false
+                }
+
+
+
+
+
+            cada tarea se pinta en un componente que retorna un <li>. Este <li> esta formado por: el boton del check, la tarea, un boton de editar y un boton de eliminar, por ejemplo: <li> <check> 'tarea' <editar> <eliminar> </li>
+
+            para que ponga o quite un check, se usa un operador ternario que evalua el valor booleano de la propiedad 'completada' y dependiendo de dicho booleano se colacara una imagen o la otra (una sin check o la otra con check)
+
+                        {
+                            completada? 
+                                <FaCheckSquare 
+                                    onClick={()=>{toogle(id)}}
+                                /> 
+                                : 
+                                <FaSquare
+                                    onClick={()=>{toogle(id)}}
+                                />
+                        } 
+
+
+
+
+
+            Para hacer el cambio nuevamente, usamos un evento 'onClick' sobre este boton de check que ejecutara una funcion. Esta recibira como parametro el 'id' de la tarea y usando el metodo .map recorremos el array de las tareas que estan guardadas y por cada tarea, usando un 'if', buscamos que el id del parametro sea igual al id de la tarea. Cuando sea hallado retornamos un objeto con todos los datos del objeto de la tarea, usando el operador spread, pero cambiando el valor booleano en 'completada'.
+
+                    const toogle = (id)=>{
+                        const idEncontrado = tareas.map(tarea=>{
+                            if(tarea.id===id){
+                                return {...tarea, completada: !tarea.completada}
+                            } else return tarea
+                        })
+
+                        setTareas(idEncontrado)
+                    }
+
+
+            De esta forma cuando se pregunte el valor de 'completada' pondra uno u otro boton
+}
+
             
-            {
-                completada? 
-                    <FaCheckSquare /> 
-                    : 
-                    <FaSquare />
-            } 
-            
-            
-            {editandoTarea? 
-                <form >
-                    <input type="text" />
-                    <button >Actualizar</button>
-                </form>
-                :
-                tarea 
-            }
-            
-            
-            <CiEdit />
-            <MdDeleteForever />
-        </li>
-    )
+
+
+
+
+const ¿COMO SE HACE PARA EDITAR LA TAREA? = (){
+                cada tarea se pinta en un componente que retorna un <li>. Este <li> esta formado por: el boton del check, la tarea, un boton de editar y un boton de eliminar, por ejemplo: <li> <check> 'tarea' <editar> <eliminar> </li>
+
+            Lo que se hace es que 'tarea' este dentro de un ternario de tal manera que este muestre la tarea o un formulario y para ello, dentro de este componente, usamos un useState que guardara un 'false' inicialmente: const [editandoTarea, setEditandoTarea] = useState(false)
+
+
+                        {editandoTarea? 
+                            <form />
+                            :
+                            tarea 
+                        }
+
+            si 'editandoTarea' es verdadero muestra el formulario, caso contrario muestra la tarea
+
+            Para cambiar el valor de este ternario, sobre <editar>, que puede ser una imagen o un boton, usamos un 'onClick' que ejecutara como funcion cambiar el estado de 'editandoTarea' 
+
+                            <editar 
+                            onClick={()=>{setEditandoTarea(!editandoTarea)}}
+                            />
+
+
+            De esta forma se pintara en pantalla la tarea o el formulario.
+
+            Este formulario estara compuesto por un input de tipo texto y un boton con el nombre 'Actualizar'. Para capturar la nueva tarea, la actualizada, usamos un usestate:  const [nuevaTarea, setNuevaTarea] = useState(tarea) y le pasamos la tarea actual para que no quede vacio el campo de texto cuando se entre a actualizar:
+
+                            <form className="formulario-editar-tarea">
+                                <input 
+                                    type="text" 
+                                    value={nuevaTarea}
+                                    onChange={(e)=>{setNuevaTarea(e.target.value)}}
+                                />
+                                
+                                <button 
+                                    type="submit"
+                                    onClick={(e)=>{
+                                        e.preventDefault()
+                                        editarTarea(id, nuevaTarea)}
+                                    }
+                                >Actualizar</button>
+                            </form>
+
+
+            con el 'onChange' del input reemplazamos la tarea anterior por la nueva. Para actualizarla, en el boton usamos un 'onClick' que ejecutara una funcion 'editarTarea(id, nuevaTarea)' llevando como argumentos el id de la tarea y el valor capturado en el input.
+
+            En la funcion se recorrera el array de tareas para buscar la que hay que reemplazar por la nueva, finalmente se actualiza todo el array de tareas y se cambia el estado de editando tarea para que desaparezca el formulario:
+
+                const editarTarea = (id, nuevaTarea)=>{
+                    const editarArrayTareas = tareas.map(tarea=>{
+                        if(tarea.id===id){
+                            return {...tarea, tarea:nuevaTarea}
+
+                        }else return tarea
+                    })
+
+                    setTareas(editarArrayTareas)
+                    setEditandoTarea(!editandoTarea)
+                }
 }
 
 
 
 
-Recordemos que cada tarea es creada con un objeto y este tiene una clave con un valor booleano: 'completada: false'
-Para colocarle un check o quitarselo a la tarea, necesitamos evaluar esta clave con un ternario y como tiene un valor 'false' va a saltar a la instruccion que esta despues de los dos puntos. Es aqui donde colocamos una imagen sin check. PILAS!! 'completada' debe ser un prop del componente.
-Para colocar imagenes vease el documento 'LIBRERIAS DE REACT' la seccion 'PAQUETE DE ICONOS' 
 
-            {
-                completada? 
-                    <FaCheckSquare /> 
-                    : 
-                    <FaSquare />
-            } 
 
+const COMO SE BORRA UNA TAREA? = (){
+                Sobre el boton o la imagen de eliminacion, hacemos un 'onClick' que ejecute una funcion y que lleve como argumento el id de la tarea implicada
+            Esta funcion tiene un metodo 'filter' para dejar de todas las tareas que hay en el array aquella o aquellas que sean diferentes al id de la tarea implicada. Finalmente refrescamos el array de tareas con el resto del filter
 
 
+                            <MdDeleteForever 
+                                className="lista-tareas__icono"
+                                onClick={()=>{borrarTarea(id)}}
+                            />
 
 
-Luego, para colocar primero la tarea y despues con un boton el formulario, necesitamos de un useState que me guarde un booleano que inicialmente me salte a la tarea:
+                            const borrarTarea = (id)=>{
+                                const tareasConEliminacion = tareas.filter(tarea=>{
+                                    if(tarea.id!==id){
+                                        return tarea
+                                    } else return
+                                })
+                
+                                setTareas(tareasConEliminacion)
+                
+                            }
+}
 
 
-            const [editandoTarea, setEditandoTarea] = useState(false)
 
-            {editandoTarea? 
-                <form >
-                    <input type="text" />
-                    <button >Actualizar</button>
-                </form>
-                :
-                tarea 
-            }
 
 
 
@@ -261,146 +373,29 @@ Luego, para colocar primero la tarea y despues con un boton el formulario, neces
 
 
 
+¿COMO SE HACE PARA MOSTRAR O NO LAS TAREAS REALIZADAS?
 
+Recordemos la seccion '¿COMO SE HACE PARA COLOCAR O QUITAR UN CHECK EN LA TAREA?' Alli se cambia el valor de la clave 'completada', que esta en el objeto creado cuando se escribe una nueva tarea, y dependiendo de este valor se coloca un boton con check o sin check.
 
 
+Para quitar de la vista aquellas tareas que ya se realizaron, las que tienen check, usaremos un boton ubicado en el <header> al lado del titulo de la aplicacion. Cada vez que oprimimos dicho boton desapareceran o apareceran las tareas que tengan el check 
 
 
 
 
 
-¿COMO SE HACE PARA COLOCAR O QUITAR UN CHECK EN LA TAREA?
 
-cada tarea generada es un objeto con un id, el dato capturado del input y un valor booleano que por defecto esta 'false'
-    tarea = {
-        id: numero aleatorio
-        tarea: datoCapturado
-        completada: false
-    }
+Como queremos quitar de la lista de tareas aquellas que el usuario indico como realizadas por medio de un check, debemos ubicar el codigo en el componente que tenga el elemento <ul> ya que en este se pintan las tareas con un <li>.
 
 
 
 
 
-cada tarea se pinta en un componente que retorna un <li>. Este <li> esta formado por: el boton del check, la tarea, un boton de editar y un boton de eliminar, por ejemplo: <li> <check> 'tarea' <editar> <eliminar> </li>
 
-para que ponga o quite un check, se usa un operador ternario que evalua el valor booleano de la propiedad 'completada' y dependiendo de dicho booleano se colacara una imagen o la otra (una sin check o la otra con check)
 
-            {
-                completada? 
-                    <FaCheckSquare 
-                         onClick={()=>{toogle(id)}}
-                    /> 
-                    : 
-                    <FaSquare
-                         onClick={()=>{toogle(id)}}
-                    />
-            } 
 
 
-
-
-
-Para hacer el cambio nuevamente, usamos un evento 'onClick' sobre este boton de check que ejecutara una funcion. Esta recibira como parametro el 'id' de la tarea y usando el metodo .map recorremos el array de las tareas que estan guardadas y por cada tarea, usando un 'if', buscamos que el id del parametro sea igual al id de la tarea. Cuando sea hallado retornamos un objeto con todos los datos del objeto de la tarea, usando el operador spread, pero cambiando el valor booleano en 'completada'.
-
-        const toogle = (id)=>{
-            const idEncontrado = tareas.map(tarea=>{
-                if(tarea.id===id){
-                    return {...tarea, completada: !tarea.completada}
-                } else return tarea
-            })
-
-            setTareas(idEncontrado)
-        }
-
-
-De esta forma cuando se pregunte el valor de 'completada' pondra uno u otro boton
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-¿COMO SE HACE PARA EDITAR LA TAREA?
-
-cada tarea se pinta en un componente que retorna un <li>. Este <li> esta formado por: el boton del check, la tarea, un boton de editar y un boton de eliminar, por ejemplo: <li> <check> 'tarea' <editar> <eliminar> </li>
-
-Lo que se hace es que 'tarea' este dentro de un ternario de tal manera que este muestre la tarea o un formulario y para ello, dentro de este componente, usamos un useState que guardara un 'false' inicialmente: const [editandoTarea, setEditandoTarea] = useState(false)
-
-
-            {editandoTarea? 
-                <form />
-                :
-                tarea 
-            }
-
-si 'editandoTarea' es verdadero muestra el formulario, caso contrario muestra la tarea
-
-Para cambiar el valor de este ternario, sobre <editar>, que puede ser una imagen o un boton, usamos un 'onClick' que ejecutara como funcion cambiar el estado de 'editandoTarea' 
-
-                <editar 
-                   onClick={()=>{setEditandoTarea(!editandoTarea)}}
-                />
-
-
-De esta forma se pintara en pantalla la tarea o el formulario.
-
-Este formulario estara compuesto por un input de tipo texto y un boton con el nombre 'Actualizar'. Para capturar la nueva tarea, la actualizada, usamos un usestate:  const [nuevaTarea, setNuevaTarea] = useState(tarea) y le pasamos la tarea actual para que no quede vacio el campo de texto cuando se entre a actualizar:
-
-                <form className="formulario-editar-tarea">
-                    <input 
-                        type="text" 
-                        value={nuevaTarea}
-                        onChange={(e)=>{setNuevaTarea(e.target.value)}}
-                    />
-                    
-                    <button 
-                        type="submit"
-                        onClick={(e)=>{
-                            e.preventDefault()
-                            editarTarea(id, nuevaTarea)}
-                        }
-                    >Actualizar</button>
-                </form>
-
-
-con el 'onChange' del input reemplazamos la tarea anterior por la nueva. Para actualizarla, en el boton usamos un 'onClick' que ejecutara una funcion 'editarTarea(id, nuevaTarea)' llevando como argumentos el id de la tarea y el valor capturado en el input.
-
-En la funcion se recorrera el array de tareas para buscar la que hay que reemplazar por la nueva, finalmente se actualiza todo el array de tareas y se cambia el estado de editando tarea para que desaparezca el formulario:
-
-    const editarTarea = (id, nuevaTarea)=>{
-        const editarArrayTareas = tareas.map(tarea=>{
-            if(tarea.id===id){
-                return {...tarea, tarea:nuevaTarea}
-
-            }else return tarea
-        })
-
-        setTareas(editarArrayTareas)
-        setEditandoTarea(!editandoTarea)
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
+Dentro de este <ul> y con un ternario se evalua la longitud del array de tareas. Si no hay tareas se coloca un mensaje, pero si la longitud del array es mayor a 0 se usa un .map para pintar en el DOM tarea por tarea, pero antes de pintar cada tarea se evalua 
 
 
 

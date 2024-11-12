@@ -27,17 +27,18 @@ export const Header = ({mostrarCompletadas, setMostrarCompletadas})=>{
             <h1 className="header__titulo">LISTA DE TAREAS</h1>
             
             {
-                mostrarCompletadas ? 
+                mostrarCompletadas ?
+                
                 <button 
                     className="header__boton"
                     onClick={cambiarEstadoDeCompletadas}
-                    > Mostrar tareas realizadas <FaEye className="header__icono-boton"/>
+                    > No Mostrar 'tareas realizadas' <FaEyeSlash className="header__icono-boton"/>
                 </button>
                 :
                 <button 
                     className="header__boton"
                     onClick={cambiarEstadoDeCompletadas}
-                    > No Mostrar tareas realizadas <FaEyeSlash className="header__icono-boton"/>
+                    > Mostrar 'tareas realizadas' <FaEye className="header__icono-boton"/>
                 </button>
             }
         </header>
@@ -114,7 +115,7 @@ export const Formulario = ({tareas, setTareas})=>{
 
 
 
-export const Lista_de_tareas = ({tareas, setTareas})=>{
+export const Lista_de_tareas = ({tareas, setTareas, mostrarCompletadas})=>{
 
     console.log(tareas)
     return(
@@ -124,21 +125,32 @@ export const Lista_de_tareas = ({tareas, setTareas})=>{
                     <div className="lista-tareas__mensaje">No hay tareas agregadas</div>
                     :
                     tareas.map(tarea=>{
-                        return (
-                            <Tarea 
-                                key={tarea.id}
-                                tarea={tarea.tarea} 
-                                completada={tarea.completada}
-                                id={tarea.id}
-                                tareas={tareas}
-                                setTareas={setTareas}
-                            />
-                        )
+                        if(mostrarCompletadas){
+                            return (
+                                <Tarea 
+                                    key={tarea.id}
+                                    tarea={tarea.tarea} 
+                                    completada={tarea.completada}
+                                    id={tarea.id}
+                                    tareas={tareas}
+                                    setTareas={setTareas}
+                                />
+                            )
+                        } else if(!tarea.completada){
+                            return (
+                                <Tarea 
+                                    key={tarea.id}
+                                    tarea={tarea.tarea} 
+                                    completada={tarea.completada}
+                                    id={tarea.id}
+                                    tareas={tareas}
+                                    setTareas={setTareas}
+                                />
+                            )} else return
                     })
-            }
+                }
         </ul>
     )
-
 }
 
 
@@ -178,7 +190,6 @@ const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
 
 
     
-    
     const toogle = (id)=>{
 
 
@@ -190,6 +201,19 @@ const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
 
         setTareas(idEncontrado)
         
+    }
+
+
+
+    const borrarTarea = (id)=>{
+        const tareasConEliminacion = tareas.filter(tarea=>{
+            if(tarea.id!==id){
+                return tarea
+            } else return
+        })
+    
+        setTareas(tareasConEliminacion)
+    
     }
 
 
@@ -216,9 +240,6 @@ const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
             
             
             
-            
-            
-            
             {editandoTarea? 
                 <form className="formulario-editar-tarea">
                     <input 
@@ -236,32 +257,27 @@ const Tarea = ({setTareas, tareas, id, tarea, completada})=>{
                             editarTarea(id, nuevaTarea)}
                         }
                     >Actualizar</button>
-
-
+                    
                 </form>
                 :
                 tarea 
             }
             
-
-
-
+            
+            
             <div className="lista-tareas__contenedor-botones">
                 <CiEdit 
                     className="lista-tareas__icono" 
                     onClick={()=>{setEditandoTarea(!editandoTarea)}}
                 />
                 
-                <MdDeleteForever className="lista-tareas__icono"/>
+                <MdDeleteForever 
+                    className="lista-tareas__icono"
+                    onClick={()=>{borrarTarea(id)}}
+                />
             </div>
             
-            
-            
-            
-            
-            
         </li>
-
     )
 }
 
