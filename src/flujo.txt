@@ -378,30 +378,7 @@ const COMO SE BORRA UNA TAREA? = (){
 Recordemos la seccion '¿COMO SE HACE PARA COLOCAR O QUITAR UN CHECK EN LA TAREA?' Alli se cambia el valor de la clave 'completada', que esta en el objeto creado cuando se escribe una nueva tarea, y dependiendo de este valor se coloca un boton con check o sin check.
 
 
-Para quitar de la vista aquellas tareas que ya se realizaron, las que tienen check, usaremos un boton ubicado en el <header> al lado del titulo de la aplicacion. Cada vez que oprimimos dicho boton desapareceran o apareceran las tareas que tengan el check 
-
-
-
-
-
-
-Como queremos quitar de la lista de tareas aquellas que el usuario indico como realizadas por medio de un check, debemos ubicar el codigo en el componente que tenga el elemento <ul> ya que en este se pintan las tareas con un <li>.
-
-
-
-
-
-
-
-
-
-Dentro de este <ul> y con un ternario se evalua la longitud del array de tareas. Si no hay tareas se coloca un mensaje, pero si la longitud del array es mayor a 0 se usa un .map para pintar en el DOM tarea por tarea, pero antes de pintar cada tarea se evalua 
-
-
-
-
-
-
+Para quitar de la vista aquellas tareas que ya se realizaron, las que tienen check, usaremos un boton ubicado en el <header> al lado del titulo de la aplicacion. Cada vez que oprimimos dicho boton desapareceran o apareceran las tareas que tengan el check. 
 
 
 
