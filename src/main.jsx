@@ -16,7 +16,18 @@ const App = ()=>{
   
   return (
     <div className='contenedor'>
-      <Header mostrarCompletadas={mostrarCompletadas} setMostrarCompletadas={setMostrarCompletadas}/>
+      <Header 
+        mostrarCompletadas={mostrarCompletadas} 
+        setMostrarCompletadas={setMostrarCompletadas}
+        tareas={tareas}
+        
+      />
+
+
+
+
+
+
       <Formulario tareas={tareas} setTareas={setTareas}/>
       <Lista_de_tareas tareas={tareas} setTareas={setTareas} mostrarCompletadas={mostrarCompletadas}/>
     </div>

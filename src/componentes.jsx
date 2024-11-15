@@ -17,29 +17,33 @@ import './index.css'
 
 
 
-export const Header = ({mostrarCompletadas, setMostrarCompletadas})=>{
+export const Header = ({mostrarCompletadas, setMostrarCompletadas, tareas})=>{
     
     const cambiarEstadoDeCompletadas = ()=>{setMostrarCompletadas(!mostrarCompletadas)}
     
+    
     return(
         <header className="header">
-            
+
             <h1 className="header__titulo">LISTA DE TAREAS</h1>
             
+            
             {
-                mostrarCompletadas ?
-                
-                <button 
-                    className="header__boton"
-                    onClick={cambiarEstadoDeCompletadas}
-                    > No Mostrar 'tareas realizadas' <FaEyeSlash className="header__icono-boton"/>
-                </button>
-                :
-                <button 
-                    className="header__boton"
-                    onClick={cambiarEstadoDeCompletadas}
-                    > Mostrar 'tareas realizadas' <FaEye className="header__icono-boton"/>
-                </button>
+                tareas.length==0?
+                    <></>
+                    : 
+                    mostrarCompletadas ?
+                        <button 
+                            className="header__boton"
+                            onClick={cambiarEstadoDeCompletadas}
+                            > No Mostrar 'tareas realizadas' <FaEyeSlash className="header__icono-boton"/>
+                        </button>
+                        :
+                        <button 
+                            className="header__boton"
+                            onClick={cambiarEstadoDeCompletadas}
+                            > Mostrar 'tareas realizadas' <FaEye className="header__icono-boton"/>
+                        </button>
             }
         </header>
     )
@@ -117,7 +121,6 @@ export const Formulario = ({tareas, setTareas})=>{
 
 export const Lista_de_tareas = ({tareas, setTareas, mostrarCompletadas})=>{
 
-    console.log(tareas)
     return(
         <ul className='lista-tareas'>
             {
