@@ -22,14 +22,20 @@ const App = ()=>{
         tareas={tareas}
         
       />
-
-
-
-
-
-
-      <Formulario tareas={tareas} setTareas={setTareas}/>
-      <Lista_de_tareas tareas={tareas} setTareas={setTareas} mostrarCompletadas={mostrarCompletadas}/>
+      
+      <Formulario 
+        tareas={tareas} 
+        setTareas={setTareas}
+      />
+      
+      
+      
+      <Lista_de_tareas 
+        tareas={tareas} 
+        setTareas={setTareas} 
+        mostrarCompletadas={mostrarCompletadas}
+      />
+      
     </div>
   )
 }

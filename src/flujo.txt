@@ -378,7 +378,42 @@ const COMO SE BORRA UNA TAREA? = (){
 Recordemos la seccion '¿COMO SE HACE PARA COLOCAR O QUITAR UN CHECK EN LA TAREA?' Alli se cambia el valor de la clave 'completada', que esta en el objeto creado cuando se escribe una nueva tarea, y dependiendo de este valor se coloca un boton con check o sin check.
 
 
-Para quitar de la vista aquellas tareas que ya se realizaron, las que tienen check, usaremos un boton ubicado en el <header> al lado del titulo de la aplicacion. Cada vez que oprimimos dicho boton desapareceran o apareceran las tareas que tengan el check. 
+Para quitar de la vista aquellas tareas que ya se realizaron, las que tienen check, usaremos un boton ubicado en el <header> al lado del titulo de la aplicacion. Cada vez que oprimimos dicho boton desapareceran o apareceran las tareas que tengan el check o que se hayan realizado.
+
+
+El componente <header> retorna un titulo, <h1>, y un boton siempre y cuando hayan tareas en el array, si hay tareas se evalua un useState global que inicialmente tiene un valor booleano de tal manera que me muestre inicialmente un boton con una imagen para no mostrar las tareas con check o las 'tareas realizadas':
+
+
+    return(
+        <header >
+
+            <h1>LISTA DE TAREAS</h1>
+            
+            {
+                tareas.length==0?
+                    <></>
+                    : 
+                    mostrarCompletadas ?
+                        <button> No Mostrar 'tareas realizadas' <FaEyeSlash /></button>
+                        :
+                        <button> Mostrar 'tareas realizadas' <FaEye /></button>
+            }
+        </header>
+    )
+
+
+
+Para hacer que el boton cambie la imagen y muestre 'Mostrar 'tareas realizadas'' en cada boton colocaremos un 'onClick' que ejecutara una funcion que cambiara el boolenao del useState global. Recordemos que este hook, por ser global, se cargo en el componente. De esta forma en cada click cambiara el texto y la imagen del boton. Pero aun no esta ocultando las tareas con check, para ello debemos hacer algo mas.
+
+
+En el componente que se retorna la lista no ordenada de tareas, <ul>, debemos cargar el hook donde esta el valor boleano que se modifico al hacer click en el boton de 'tareas realizadas'. Luego recorremos el array de tareas y por cada una evaluamos el estado del hook modificado con el boton de 'tareas realizadas'. Si este cumple con el valor inicial, va a retornar la tarea sin lio. 
+Si no se cumple, se evalua el estado de la clave 'completada' de cada tarea 
+
+
+CAMBIE EL VALOR DEL HOOK const [mostrarCompletadas, setMostrarCompletadas ] = useState(true)
+  
+
+
 
 
 

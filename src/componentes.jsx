@@ -117,8 +117,6 @@ export const Formulario = ({tareas, setTareas})=>{
 
 
 
-
-
 export const Lista_de_tareas = ({tareas, setTareas, mostrarCompletadas})=>{
 
     return(
@@ -155,10 +153,6 @@ export const Lista_de_tareas = ({tareas, setTareas, mostrarCompletadas})=>{
         </ul>
     )
 }
-
-
-
-
 
 
 
